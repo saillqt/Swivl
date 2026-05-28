@@ -1298,6 +1298,18 @@
     }, { passive: true });
     carMain.addEventListener('touchend', endCarDrag);
 
+    // Wheel scroll to navigate carousel
+    let wheelLock = false;
+    carMain.addEventListener('wheel', e => {
+      e.preventDefault();
+      if (wheelLock) return;
+      const delta = e.deltaY || e.deltaX;
+      if (Math.abs(delta) < 5) return;
+      wheelLock = true;
+      carGoTo(carCur + (delta > 0 ? 1 : -1));
+      setTimeout(() => { wheelLock = false; }, 450);
+    }, { passive: false });
+
     function endCarDrag() {
       if (!dragging) return;
       dragging = false;
